@@ -89,3 +89,43 @@ v0lshebnick/paymentservice:v0.0.2
 kubectl.exe apply -f paymentservice-deployment.yaml
 ```
 </details>
+
+<details>
+<summary>kubernetes-security</summary>
+
+<h3>Task1</h3>
+
+```text
+01_service_account_bob.yaml - создаём сервисный акк bob
+
+02_clusterrole_bob.yaml - даём bob права админа кластера
+
+03_service_account_dave.yaml - создаём сервисный акк dave
+```
+
+<h3>Task2</h3>
+
+```text
+01_namespace.yaml - создаём ns prometheus
+
+02_service_account_carol.yaml - создаем sa carol
+
+03_cluster_role.yaml - выдаем всем sa определенные права
+
+04_clustre_role_binding.yaml - выставляем права
+```
+
+<h3>Task3</h3>
+
+```text
+01_namespace_dev.yaml - создаём ns dev
+
+02_service_account_jane.yaml - создаем sa jane в ns dev
+
+03_role_binding_jane.yaml - выдаем sa jane role admin в ns dev
+
+04_service_account_ken.yaml - создаём ns ken
+
+05_role_binding_ken.yaml - выдаем sa ken role view в ns dev
+```
+</details>
