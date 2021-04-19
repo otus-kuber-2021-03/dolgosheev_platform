@@ -129,3 +129,82 @@ kubectl.exe apply -f paymentservice-deployment.yaml
 05_role_binding_ken.yaml - выдаем sa ken role view в ns dev
 ```
 </details>
+
+<details>
+<summary>kubernetes-volumes</summary>
+
+<h3>Развернем StatefulSel c local S3 (min.io) </h3>
+
+```text
+minio-statefulset.yaml - манифест
+```
+
+применим его
+
+```text
+kubectl apply -f minio-statefulset.yaml
+```
+
+для его доступности изнустри кластера создадим Headless Service
+
+```text
+minio-headless-service.yaml - манифест
+```
+
+применим его
+
+```text
+kubectl apply -f minio-headless-service.yaml
+```
+
+в целях безопасности поместим конфиденциальные данные в secrets, для этого 
+
+создадим 2 файлика с секретными данными
+
+```text
+echo -n 'minio' > ./access.txt
+echo -n 'minio123' > ./secret.txt
+```
+
+далее создадим секрет из данных в этих файлах
+
+```text
+kubectl create secret generic db-user-pass \
+  --from-file=./access.txt \
+  --from-file=./secret.txt
+```
+
+проверим что запись появилась 
+
+```text
+kubectl get secrets
+.
+.
+.
+$ kubectl get secrets
+NAME                  TYPE                                  DATA   AGE
+db-user-pass          Opaque                                2      8s
+```
+
+можем проверить запись в виде base64
+
+```text
+kubectl describe secrets/db-user-pass
+.
+.
+.
+{"password.txt":"bWluaW8xMjM=","username.txt":"bWluaW8="}
+```
+
+можем дефишровать и посмотреть настоящие данные
+
+```text
+echo 'bWluaW8xMjM=' | base64 --decode
+.
+.
+.
+minio123
+```
+
+далее просто добавим их в манифест стейтфулсета в виде values, пересоздадим кластер
+</details>
